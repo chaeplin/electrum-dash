@@ -221,7 +221,8 @@ class MasternodeAnnounce(object):
         vds.write_int64(self.sig_time)
         vds.write_uint32(self.protocol_version)
         self.last_ping.serialize(vds)
-        vds.write_int64(self.last_dsq)
+        if self.protocol_version < 70201:
+            vds.write_int64(self.last_dsq)
 
         return vds.input.encode('hex')
 
