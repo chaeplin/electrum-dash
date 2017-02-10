@@ -196,12 +196,19 @@ class MasternodeAnnounce(object):
 
         last_ping = MasternodePing.deserialize(vds)
 
-        last_dsq = vds.read_int64()
+        if self.protocol_version < 70201:
+            last_dsq = vds.read_int64()
 
-        kwargs = {'vin': vin, 'addr': address, 'collateral_key': collateral_pubkey,
+            kwargs = {'vin': vin, 'addr': address, 'collateral_key': collateral_pubkey,
                     'delegate_key': delegate_pubkey, 'sig': sig, 'sig_time': sig_time,
                     'protocol_version': protocol_version, 'last_ping': last_ping, 'last_dsq': last_dsq}
-        return cls(**kwargs)
+            return cls(**kwargs)
+
+        else:
+            kwargs = {'vin': vin, 'addr': address, 'collateral_key': collateral_pubkey,
+                    'delegate_key': delegate_pubkey, 'sig': sig, 'sig_time': sig_time,
+                    'protocol_version': protocol_version, 'last_ping': last_ping}
+            return cls(**kwargs)            
 
     def get_hash(self):
         vds = BCDataStream()
