@@ -142,13 +142,18 @@ class BudgetVote(object):
             self.timestamp = int(time.time())
 
         s = self.get_vin_short()
+        s += '|'
         s += self.proposal_hash
+        s += '|'
+        s += '1' # funding
+        s += '|'
         vote = '1' if self.vote.upper() == 'YES' else '0'
         s += vote
-
+        s += '|'
         s += str(self.timestamp)
+        
         return s
-
+    
     def sign(self, wif, current_time=None):
         """Sign the vote."""
         update_time = True
